@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel = "stylesheet" href = "{%static 'css/search.css'%}">
+{% endblock head %}
+
+{% block content %}
+
+<div id="genre" class = "content visible">
+    <h1 class = "question">何を食べたいですか</h1>
+    <div class="h-container">
+        <a class = "btn btn-genre" href="">居酒屋</a>
+        <a class = "btn btn-genre" href="">ダイニングバー・バル</a>
+        <a class = "btn btn-genre" href="">創作料理</a>
+        <a class = "btn btn-genre" href="">和食</a>
+        <a class = "btn btn-genre" href="">洋食</a>
+        <a class = "btn btn-genre" href="">中華</a>
+        <a class = "btn btn-genre" href="">イタリアン・フレンチ</a>
+        <a class = "btn btn-genre" href="">韓国料理</a>
+        <a class = "btn btn-genre" href="">焼肉・ホルモン</a>
+        <a class = "btn btn-genre" href="">アジア・エスニック料理</a>
+        <a class = "btn btn-genre" href="">こだわらない</a>
+    </div>
+    <div class="b-container">
+        <button href="" class="btn next">次へ</button>
+    </div>
+</div>
+<div id="scene" class = "content">
+    <h1 class = "question">どんなシーンですか？</h1>
+    <div class="h-container">
+        <a class = "btn btn-scene" href="">知人・友人と</a>
+        <a class = "btn btn-scene" href="">家族・子どもと</a>
+        <a class = "btn btn-scene" href="">会社の宴会</a>
+        <a class = "btn btn-scene" href="">デート</a>
+        <a class = "btn btn-scene" href="">一人で</a>
+        <a class = "btn btn-scene" href="">記念日・お祝い・サプライズ</a>
+        <a class = "btn btn-scene" href="">接待・会食</a>
+        <a class = "btn btn-scene" href="">大人数の宴会</a>
+        <a class = "btn btn-scene" href="">合コン</a>
+        <a class = "btn btn-scene" href="">こだわらない</a>
+    </div>
+    <div class="b-container">
+        <button href="" class="btn next">次へ</button>
+    </div>
+</div>
+<div id="budget" class = "content">
+    <h1 class = "question">予算はどれくらいですか？</h1>
+    <div class="h-container">
+        <a class = "btn btn-budget" href="">〜500円</a>
+        <a class = "btn btn-budget" href="">500円〜1000円</a>
+        <a class = "btn btn-budget" href="">1000円〜2000円</a>
+        <a class = "btn btn-budget" href="">2000円〜3000円</a>
+        <a class = "btn btn-budget" href="">3000円〜5000円</a>
+        <a class = "btn btn-budget" href="">5000円〜</a>
+        <a class = "btn btn-budget" href="">こだわらない</a>
+    </div>
+    <div class="b-container">
+        <button href="" class="btn next">次へ</button>
+    </div>
+</div>
+<div id="distance" class = "content">
+    <h1 class = "question">現在地からの距離</h1>
+    <div class="b-container">
+        <button href="" class="btn next">次へ</button>
+    </div>
+</div>
+
+
+<!-- <button class="btn" id = "next">次へ</button> -->
+
+{% endblock content %}
+
+{% block js %}
+
+<script type="text/javascript">
+
+    var btn_list = new Array(3);
+
+    btn_list[0] = document.getElementsByClassName("btn-genre"); //ジャンル
+    btn_list[1] = document.getElementsByClassName("btn-scene"); //シーン
+    btn_list[2] = document.getElementsByClassName("btn-budget");//予算
+    var distance = "1500";
+
+
+    //btnのactive, deactive処理
+    for(let i = 0; i < btn_list.length; i ++){
+        for(let j = 0; j < btn_list[i].length; j ++){
+            btn_list[i][j].addEventListener("click", e => {
+                e.preventDefault();
+                console.log("click")
+                if(btn_list[i][j].classList.contains("active") == true){
+                    btn_list[i][j].classList.remove("active");
+                }else{
+                    btn_list[i][j].classList.add("active");
+                }
+            });
+        }
+    }
+
+    // 画面の遷移
+    let contents = document.getElementsByClassName("content")
+    let btn_next = document.getElementsByClassName("next")
+    var state = 0;
+
+    for(i = 0; i < btn_next.length; i ++){
+        btn_next[i].addEventListener("click", e => {
+            if(state <= 2){
+                contents[state].classList.remove("visible")
+                state += 1;
+                contents[state].classList.add("visible")
+            }
+        });
+    }
+
+    // var genre = "韓国料理";
+    // var scene = "友人・知人と";
+    // var budget = "3000";
+    // var distance = "1500";
+
+    // document.getElementById("next").addEventListener("click", e => {
+    //     e.preventDefault();
+        
+    //     var url = "/gourmet_list?keyword=" + encodeURIComponent(genre) + "," + encodeURIComponent(scene);
+    //     window.location.href = url;
+    // })
+
+</script>
+
+{% endblock js %}

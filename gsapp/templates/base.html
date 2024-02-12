@@ -1,0 +1,24 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang = "ja">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}{% endblock %}</title>
+        <link rel = "stylesheet" href = "{%static 'css/common.css'%}">
+        {%block head%}{%endblock%}
+    </head>
+
+    <body>
+        <header>
+            <a href="{% url "gsapp:index" %}" class="logo-container">
+                <img src="{% static 'images/logo.svg' %}" alt="モグマッチ" id = "logo">
+            </a>
+        </header>
+        {%block content%}{%endblock%}
+        <footer>
+        </footer>
+        {% block js %}{% endblock js %}
+    </body>
+</html>

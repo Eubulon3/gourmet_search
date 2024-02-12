@@ -1,0 +1,38 @@
+.content{
+    display: none;
+    padding: 0 30%;
+    height: calc(100vh - 60px);
+
+    /* display: flex; */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn.active{
+    background-color: #4f200d;
+    color: #fff;
+}
+
+.content.visible{
+    display: flex;
+}
+
+.question{
+    color: white;
+}
+
+.h-container{
+    margin-top: 10%;
+}
+
+
+.b-container{
+    width: 100%;
+    position: relative;
+    margin-top: 10%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
