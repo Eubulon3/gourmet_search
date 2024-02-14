@@ -12,9 +12,7 @@
 
     <body>
         <header>
-            <a href="{% url "gsapp:index" %}" class="logo-container">
-                <img src="{% static 'images/logo.svg' %}" alt="モグマッチ" id = "logo">
-            </a>
+            {% block logo %}{% endblock logo %}
         </header>
         {%block content%}{%endblock%}
         <footer>

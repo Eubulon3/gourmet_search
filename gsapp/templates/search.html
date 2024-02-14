@@ -5,21 +5,26 @@
 <link rel = "stylesheet" href = "{%static 'css/search.css'%}">
 {% endblock head %}
 
+{% block logo %}
+<a href="{% url 'gsapp:index' %}" class="logo-container">
+    <img src="{% static 'images/logo.svg' %}" alt="モグマッチ" id = "logo">
+</a>{% endblock logo %}
+
 {% block content %}
 
 <div id="genre" class = "content visible">
     <h1 class = "question">何を食べたいですか</h1>
     <div class="h-container">
         <a class = "btn btn-genre" href="">居酒屋</a>
-        <a class = "btn btn-genre" href="">ダイニングバー・バル</a>
+        <a class = "btn btn-genre" href="">ダイニングバー,バル</a>
         <a class = "btn btn-genre" href="">創作料理</a>
         <a class = "btn btn-genre" href="">和食</a>
         <a class = "btn btn-genre" href="">洋食</a>
         <a class = "btn btn-genre" href="">中華</a>
-        <a class = "btn btn-genre" href="">イタリアン・フレンチ</a>
+        <a class = "btn btn-genre" href="">イタリアン,フレンチ</a>
         <a class = "btn btn-genre" href="">韓国料理</a>
-        <a class = "btn btn-genre" href="">焼肉・ホルモン</a>
-        <a class = "btn btn-genre" href="">アジア・エスニック料理</a>
+        <a class = "btn btn-genre" href="">焼肉,ホルモン</a>
+        <a class = "btn btn-genre" href="">アジア,エスニック料理</a>
         <a class = "btn btn-genre" href="">こだわらない</a>
     </div>
     <div class="b-container">
@@ -29,13 +34,13 @@
 <div id="scene" class = "content">
     <h1 class = "question">どんなシーンですか？</h1>
     <div class="h-container">
-        <a class = "btn btn-scene" href="">知人・友人と</a>
-        <a class = "btn btn-scene" href="">家族・子どもと</a>
+        <a class = "btn btn-scene" href="">友人</a>
+        <a class = "btn btn-scene" href="">家族,子ども</a>
         <a class = "btn btn-scene" href="">会社の宴会</a>
         <a class = "btn btn-scene" href="">デート</a>
-        <a class = "btn btn-scene" href="">一人で</a>
-        <a class = "btn btn-scene" href="">記念日・お祝い・サプライズ</a>
-        <a class = "btn btn-scene" href="">接待・会食</a>
+        <a class = "btn btn-scene" href="">一人</a>
+        <a class = "btn btn-scene" href="">記念日,お祝い,サプライズ</a>
+        <a class = "btn btn-scene" href="">接待,会食</a>
         <a class = "btn btn-scene" href="">大人数の宴会</a>
         <a class = "btn btn-scene" href="">合コン</a>
         <a class = "btn btn-scene" href="">こだわらない</a>
@@ -45,7 +50,7 @@
     </div>
 </div>
 <div id="budget" class = "content">
-    <h1 class = "question">予算はどれくらいですか？</h1>
+    <h1 class = "question">予算はどれくらいですか？(2つまで選択可能)</h1>
     <div class="h-container">
         <a class = "btn btn-budget" href="">〜500円</a>
         <a class = "btn btn-budget" href="">500円〜1000円</a>
@@ -61,6 +66,11 @@
 </div>
 <div id="distance" class = "content">
     <h1 class = "question">現在地からの距離</h1>
+
+    <div id="slider-container">
+        <input type="range" min="300" max="3000" value="1000" class="slider" id="myRange">
+    </div>
+    
     <div class="b-container">
         <button href="" class="btn next">次へ</button>
     </div>
@@ -75,12 +85,42 @@
 
 <script type="text/javascript">
 
+    function conversion_distance(value){
+        if(value<=300){
+            range = "1";
+        }else if(value>300 && value <= 500){
+            range = "2";
+        }else if(value>500 && value <= 1000){
+            range = "3";
+        }else if(value>1000 && value <= 2000){
+            range = "4";
+        }else if(value>2000 && value <= 3000){
+            range = "5";
+        }
+        return range
+    }
+
+    // --------スライダー-----------
+
+    const slider = document.getElementById("myRange");
+    const output = document.createElement("p");
+    output.textContent = slider.value + "(m)";
+
+    slider.oninput = function() {
+        output.textContent = this.value + "(m)";
+    };
+
+    document.getElementById("slider-container").appendChild(output);
+
+    //-----------------------------
+
+
     var btn_list = new Array(3);
 
     btn_list[0] = document.getElementsByClassName("btn-genre"); //ジャンル
     btn_list[1] = document.getElementsByClassName("btn-scene"); //シーン
     btn_list[2] = document.getElementsByClassName("btn-budget");//予算
-    var distance = "1500";
+    var range = conversion_distance(slider.value);
 
 
     //btnのactive, deactive処理
@@ -102,28 +142,46 @@
     let contents = document.getElementsByClassName("content")
     let btn_next = document.getElementsByClassName("next")
     var state = 0;
+    var keywords = [];
+    var budget = []; //2個まで
 
     for(i = 0; i < btn_next.length; i ++){
         btn_next[i].addEventListener("click", e => {
+            e.preventDefault();
             if(state <= 2){
-                contents[state].classList.remove("visible")
+                contents[state].classList.remove("visible");
                 state += 1;
-                contents[state].classList.add("visible")
+                contents[state].classList.add("visible");
+            }else{
+                for(let i = 0; i < btn_list.length; i ++){ //activeを探す
+                    for(let j = 0; j < btn_list[i].length; j ++){
+                        if(btn_list[i][j].classList.contains("active") == true){
+                            if(i < 2){
+                                keywords.push(btn_list[i][j].textContent);
+                            }else{
+                                budget.push(btn_list[i][j].textContent);
+                            }
+                        };
+                    }
+                }
+
+                var keywords_str = "";
+                var budget_str = ""
+                for(let i = 0; i < keywords.length; i++){
+                    if(i != 0){
+                        keywords_str += ","
+                    }
+                    keywords_str += keywords[i];
+                    // budget_str += keywords[i];
+                }
+                console.log(keywords_str)
+                // var url = "/gourmet_list?keywords=" + encodeURIComponent(keywords_str) + "&budget=" + encodeURIComponent(budget_str) + "&range=" + encodeURIComponent(range);
+                var url = "/gourmet_list?keywords=" + encodeURIComponent(keywords_str);
+                console.log(url)
+                window.location.href = url;
             }
         });
     }
-
-    // var genre = "韓国料理";
-    // var scene = "友人・知人と";
-    // var budget = "3000";
-    // var distance = "1500";
-
-    // document.getElementById("next").addEventListener("click", e => {
-    //     e.preventDefault();
-        
-    //     var url = "/gourmet_list?keyword=" + encodeURIComponent(genre) + "," + encodeURIComponent(scene);
-    //     window.location.href = url;
-    // })
 
 </script>
 

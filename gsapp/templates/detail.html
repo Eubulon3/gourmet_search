@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head %}
+<link rel = "stylesheet" href = "{%static 'css/detail.css'%}">
+{% endblock head %}
+
+{% block logo %}
+<a href="{% url 'gsapp:index' %}" class="logo-container">
+    <img src="{% static 'images/logo_orange.svg' %}" alt="モグマッチ" id = "logo">
+</a>
+{% endblock logo %}
+
+{% block content %}
+<div class="content">
+    <h2>検索結果</h2>
+    <hr>
+    <div class="detail">
+        <h2 class="name">{{ detail.name }}</h2>
+        <p>所在地: {{ detail.address }}</p>
+        <p>営業時間: </p>
+    </div>
+</div>
+{% endblock content %}

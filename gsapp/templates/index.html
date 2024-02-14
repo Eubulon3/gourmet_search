@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% block logo %}
+<a href="{% url "gsapp:index" %}" class="logo-container">
+    <img src="{% static 'images/logo.svg' %}" alt="モグマッチ" id = "logo">
+</a>{% endblock logo %}
 {% block content %}
 <div class = "btn-container">
     <a href = "{% url "gsapp:search" %}" class="btn">
