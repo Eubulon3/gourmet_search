@@ -3,9 +3,40 @@ from django.core.paginator import Paginator
 from django.views import generic
 import requests
 import os
+from datetime import datetime
 
 class IndexView(generic.TemplateView):
     template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+        api_endpoint = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/"
+        api_key = os.environ.get("API_KEY")
+
+        context = super().get_context_data(**kwargs)
+
+        params = {
+            "key": api_key,
+            "keyword": "インスタ映え",
+            "count": 50,
+            "format":"json",
+        }
+        response = requests.get(api_endpoint, params=params)
+
+
+        if response.status_code == 200:
+            data = response.json()
+
+            gourmet_photo = data["results"]["shop"]
+
+            context["gourmet_photo"] = gourmet_photo
+
+            return context
+        
+        else:
+            # エラーメッセージを表示
+            pass
+
+        
 
 class SearchView(generic.TemplateView):
     template_name = "search.html"
@@ -16,16 +47,21 @@ def gourmet_list(request):
     api_endpoint = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/"
     api_key = os.environ.get("API_KEY")
 
-    keywords = request.GET.get("keywords", "")
+    genre = request.GET.get("genre", "")
     budget = request.GET.get("budget", "")
     range = request.GET.get("range", "")
-    lat = ""
-    ing = ""
+    lat = request.GET.get("lat", "")
+    lng = request.GET.get("lng", "")
+
 
     params = {
         "key": api_key,
-        "keyword": keywords,
+        "genre": genre,
+        "budget": budget,
         "count": 50,
+        "lat": lat,
+        "lng": lng,
+        "range": range,
         "format":"json",
     }
 
@@ -72,13 +108,13 @@ def detail_view(request, id):
 
         gourmet_detail = data["results"]["shop"][0]
 
-        print(gourmet_detail)
+        current_time = datetime.now().time()
 
         context = {
             "detail": gourmet_detail,
+            "current_time": current_time,
         }
 
         return render(request, "detail.html", context)
     else:
-        # エラーメッセージを表示
         pass

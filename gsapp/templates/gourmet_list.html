@@ -13,42 +13,46 @@
 {% endblock logo %}
 
 {% block content %}
+<div class="background"></div>
 <div class="content">
     <div class="results">
         <h2>検索結果</h2>
         <hr>
-        {% for shop in page_obj %}
-        <a href="{% url 'gsapp:detail' shop.id %}" class="info">
-            <div class="sentence">
-                <h2 class="name">{{ shop.name }}</h2>
-                <p class = "access">{{ shop.address }}</p>
-            </div>
-            <img src="{{ shop.photo.pc.m }}" alt="画像" class="shop-img">
-        </a>
-        <hr>
-        {% endfor %}
-    </div>
-
-    <nav class="pagination">
-        <div class="nav-links">
-            {% if page_obj.has_previous %}
-                <a class="first page-numbers" href="?keywords={{ request.GET.keywords }}&page=1">&laquo;</a>
-                <a class="prev page-numbers" href="?keywords={{ request.GET.keywords }}&page={{ page_obj.previous_page_number }}">&lsaquo;</a>
-            {% endif %}
-
-            {% for page_num in page_obj.paginator.page_range %}
-                {% if page_num == page_obj.number %}
-                    <span aria-current="page" class="page-numbers current">{{ page_num }}</span>
-                {% else %}
-                    <a class="page-numbers" href="?keywords={{ request.GET.keywords }}&page={{ page_num }}">{{ page_num }}</a>
-                {% endif %}
+        {% if page_obj %}
+            {% for shop in page_obj %}
+            <a href="{% url 'gsapp:detail' shop.id %}" class="info">
+                <div class="sentence">
+                    <h2 class="name">{{ shop.name }}</h2>
+                    <p class = "access">{{ shop.address }}</p>
+                </div>
+                <img src="{{ shop.photo.pc.m }}" alt="画像" class="shop-img">
+            </a>
+            <hr>
             {% endfor %}
-
-            {% if page_obj.has_next %}
-                <a class="next page-numbers" href="?keywords={{ request.GET.keywords }}&page={{ page_obj.next_page_number }}">&rsaquo;</a>
-                <a class="last page-numbers" href="?keywords={{ request.GET.keywords }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>
-            {% endif %}
-        </div>
-    </nav>
+            <nav class="pagination">
+                <div class="nav-links">
+                    {% if page_obj.has_previous %}
+                        <a class="first page-numbers" href="{{ request.get_full_path }}&page=1">&laquo;</a>
+                        <a class="prev page-numbers" href="{{ request.get_full_path }}&page={{ page_obj.previous_page_number }}">&lsaquo;</a>
+                    {% endif %}
+        
+                    {% for page_num in page_obj.paginator.page_range %}
+                        {% if page_num == page_obj.number %}
+                            <span aria-current="page" class="page-numbers current">{{ page_num }}</span>
+                        {% else %}
+                            <a class="page-numbers" href="{{ request.get_full_path }}&page={{ page_num }}">{{ page_num }}</a>
+                        {% endif %}
+                    {% endfor %}
+        
+                    {% if page_obj.has_next %}
+                        <a class="next page-numbers" href="{{ request.get_full_path }}&page={{ page_obj.next_page_number }}">&rsaquo;</a>
+                        <a class="last page-numbers" href="{{ request.get_full_path }}&page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                    {% endif %}
+                </div>
+            </nav>
+        {% else %}
+            <p>ご希望のお店が周辺にありません。</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock content %}

@@ -15,6 +15,18 @@
     
 }
 
+.detail{
+    display: flex;
+    justify-content: space-between;
+    column-gap: 30px;
+}
+
+.detail-text{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
 hr{
     margin: 20px 0 20px 0;
 }
@@ -22,4 +34,30 @@ hr{
 .name{
     font-size: 24px;
     font-weight: bold;
+}
+
+.green{
+    color: green;
+}
+
+.red{
+    color: red;
+}
+
+img{
+    margin-top: 30px;
+}
+
+.btn-back{
+    position: absolute;
+    font-size: xx-large;
+    margin-left: -2rem;
+    line-height: 1.5rem;
+}
+.small{
+    font-size: 20px;
+}
+
+.gray{
+    color: #6d6d6d;
 }

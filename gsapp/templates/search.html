@@ -12,52 +12,51 @@
 
 {% block content %}
 
-<div id="genre" class = "content visible">
-    <h1 class = "question">何を食べたいですか</h1>
+
+<div id="img-container">
+    <img src="{% static 'images/chinese_food.png' %}" alt="">
+    <img src="{% static 'images/potato.png' %}" alt="">
+    <img src="{% static 'images/italian.png' %}" alt="">
+    <img src="{% static 'images/yakitori.png' %}" alt="">
+</div>
+
+<div id="genre" class = "content active">
+    <h1 class = "question">何を食べたいですか？</h1>
     <div class="h-container">
         <a class = "btn btn-genre" href="">居酒屋</a>
-        <a class = "btn btn-genre" href="">ダイニングバー,バル</a>
+        <a class = "btn btn-genre" href="">ダイニングバー・バル</a>
         <a class = "btn btn-genre" href="">創作料理</a>
         <a class = "btn btn-genre" href="">和食</a>
         <a class = "btn btn-genre" href="">洋食</a>
         <a class = "btn btn-genre" href="">中華</a>
-        <a class = "btn btn-genre" href="">イタリアン,フレンチ</a>
+        <a class = "btn btn-genre" href="">イタリアン・フレンチ</a>
         <a class = "btn btn-genre" href="">韓国料理</a>
-        <a class = "btn btn-genre" href="">焼肉,ホルモン</a>
-        <a class = "btn btn-genre" href="">アジア,エスニック料理</a>
+        <a class = "btn btn-genre" href="">焼肉・ホルモン</a>
+        <a class = "btn btn-genre" href="">アジア・エスニック料理</a>
+        <a class = "btn btn-genre" href="">ラーメン</a>
+        <a class = "btn btn-genre" href="">カフェ・スイーツ</a>
         <a class = "btn btn-genre" href="">こだわらない</a>
     </div>
     <div class="b-container">
         <button href="" class="btn next">次へ</button>
     </div>
 </div>
-<div id="scene" class = "content">
-    <h1 class = "question">どんなシーンですか？</h1>
-    <div class="h-container">
-        <a class = "btn btn-scene" href="">友人</a>
-        <a class = "btn btn-scene" href="">家族,子ども</a>
-        <a class = "btn btn-scene" href="">会社の宴会</a>
-        <a class = "btn btn-scene" href="">デート</a>
-        <a class = "btn btn-scene" href="">一人</a>
-        <a class = "btn btn-scene" href="">記念日,お祝い,サプライズ</a>
-        <a class = "btn btn-scene" href="">接待,会食</a>
-        <a class = "btn btn-scene" href="">大人数の宴会</a>
-        <a class = "btn btn-scene" href="">合コン</a>
-        <a class = "btn btn-scene" href="">こだわらない</a>
-    </div>
-    <div class="b-container">
-        <button href="" class="btn next">次へ</button>
-    </div>
-</div>
 <div id="budget" class = "content">
-    <h1 class = "question">予算はどれくらいですか？(2つまで選択可能)</h1>
+    <h1 class = "question">予算はどれくらいですか？（2つまで選択可能）</h1>
     <div class="h-container">
         <a class = "btn btn-budget" href="">〜500円</a>
-        <a class = "btn btn-budget" href="">500円〜1000円</a>
-        <a class = "btn btn-budget" href="">1000円〜2000円</a>
-        <a class = "btn btn-budget" href="">2000円〜3000円</a>
-        <a class = "btn btn-budget" href="">3000円〜5000円</a>
-        <a class = "btn btn-budget" href="">5000円〜</a>
+        <a class = "btn btn-budget" href="">501〜1000円</a>
+        <a class = "btn btn-budget" href="">1001〜1500円</a>
+        <a class = "btn btn-budget" href="">1501〜2000円</a>
+        <a class = "btn btn-budget" href="">2001〜3000円</a>
+        <a class = "btn btn-budget" href="">3001〜4000円</a>
+        <a class = "btn btn-budget" href="">4001〜5000円</a>
+        <a class = "btn btn-budget" href="">5001〜7000円</a>
+        <a class = "btn btn-budget" href="">7001〜10000円</a>
+        <a class = "btn btn-budget" href="">10001〜15000円</a>
+        <a class = "btn btn-budget" href="">15001〜20000円</a>
+        <a class = "btn btn-budget" href="">20001〜30000円</a>
+        <a class = "btn btn-budget" href="">30001円〜</a>
         <a class = "btn btn-budget" href="">こだわらない</a>
     </div>
     <div class="b-container">
@@ -72,8 +71,12 @@
     </div>
     
     <div class="b-container">
-        <button href="" class="btn next">次へ</button>
+        <button href="" id="search" class = "btn next">検索</button>
     </div>
+</div>
+
+<div id="loading" class = "content">
+    <div id="loading-spinner"></div>
 </div>
 
 
@@ -85,7 +88,7 @@
 
 <script type="text/javascript">
 
-    function conversion_distance(value){
+    function conversion_range(value){
         if(value<=300){
             range = "1";
         }else if(value>300 && value <= 500){
@@ -100,38 +103,110 @@
         return range
     }
 
+    function get_location_and_redirect(genre_list, budget_list, range){
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(function(position){
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                const genre_str = "genre=" + encodeURIComponent(genre_list.join(","));
+                const budget_str = "&budget=" + encodeURIComponent(budget_list.join(","));
+                const range_str = "&range=" + encodeURIComponent(range);
+                const location_str = "&lat=" + encodeURIComponent(lat) + "&lng=" + encodeURIComponent(lng);
+
+                const url = "/gourmet_list?" + genre_str + budget_str + range_str + location_str;
+                window.location.href = url;
+
+            },function(error){
+                alert("位置情報を取得できませんでした。")
+                window.location.href = "";
+            });
+        }else{
+            window.location.href = "";
+        }
+    }
+
+    function convert_km(value){
+        const km = value / 1000;
+        return km + "km";
+    }
+
+    function convert_walking(meters){
+        //平均的な歩行速度80m/min
+        const speed = 80;
+        walking_time = meters / speed;
+        return Math.round(walking_time);
+
+    }
+
+
     // --------スライダー-----------
 
     const slider = document.getElementById("myRange");
     const output = document.createElement("p");
-    output.textContent = slider.value + "(m)";
-
+    if(slider.value < 1000){
+        output.textContent = slider.value + "m(徒歩" + convert_walking(slider.value) + "分)";
+    }else{
+        output.textContent = convert_km(slider.value) + "(徒歩" + convert_walking(slider.value) + "分)";
+    }
     slider.oninput = function() {
-        output.textContent = this.value + "(m)";
+        if(this.value < 1000){
+            output.textContent = this.value + "m(徒歩" + convert_walking(this.value) + "分)";
+        }else{
+            output.textContent = convert_km(this.value) + "(徒歩" + convert_walking(this.value) + "分)";
+        }
     };
-
     document.getElementById("slider-container").appendChild(output);
 
     //-----------------------------
 
-
-    var btn_list = new Array(3);
-
-    btn_list[0] = document.getElementsByClassName("btn-genre"); //ジャンル
-    btn_list[1] = document.getElementsByClassName("btn-scene"); //シーン
-    btn_list[2] = document.getElementsByClassName("btn-budget");//予算
-    var range = conversion_distance(slider.value);
-
+    btn_list = [
+        document.getElementsByClassName("btn-genre"), //ジャンル
+        document.getElementsByClassName("btn-budget"), //予算
+    ]
+    genre = {
+        "居酒屋": "G001",
+        "ダイニングバー・バル": "G002",
+        "創作料理": "G003",
+        "和食": "G004",
+        "洋食": "G005",
+        "イタリアン・フレンチ": "G006",
+        "中華": "G007",
+        "焼肉・ホルモン": "G008",
+        "アジア・エスニック料理": "G009",
+        "ラーメン": "G013",
+        "カフェ・スイーツ": "G014",
+        "韓国料理": "G017",
+        "こだわらない": "",
+    };
+    
+    budget = {
+        "〜500円": "B009",
+        "501〜1000円": "B010",
+        "1001〜1500円": "B011",
+        "1501〜2000円": "B001",
+        "2001〜3000円": "B002",
+        "3001〜4000円": "B003",
+        "4001〜5000円": "B008",
+        "5001〜7000円": "B004",
+        "7001〜10000円": "B005",
+        "10001〜15000円": "B006",
+        "15001〜20000円": "B012",
+        "20001〜30000円": "B013",
+        "30001円〜": "B014",
+        "こだわらない": "",
+    };
+    
 
     //btnのactive, deactive処理
-    for(let i = 0; i < btn_list.length; i ++){
+    for(let i = 0; i < btn_list.length; i ++){ //2回
         for(let j = 0; j < btn_list[i].length; j ++){
             btn_list[i][j].addEventListener("click", e => {
                 e.preventDefault();
-                console.log("click")
+                let activeButtons = document.querySelectorAll('.btn-budget.active');
                 if(btn_list[i][j].classList.contains("active") == true){
                     btn_list[i][j].classList.remove("active");
-                }else{
+                }else if(activeButtons.length < 2){
                     btn_list[i][j].classList.add("active");
                 }
             });
@@ -139,49 +214,43 @@
     }
 
     // 画面の遷移
-    let contents = document.getElementsByClassName("content")
-    let btn_next = document.getElementsByClassName("next")
-    var state = 0;
-    var keywords = [];
-    var budget = []; //2個まで
+    const contents = document.getElementsByClassName("content") //0:genre, 1:budget, 2:range
+    const btn_next = document.getElementsByClassName("next");
+    const btn_search = document.getElementById("search");
 
+    var state = 0;
+
+    var genre_list = [];
+    var budget_list = [];
+
+    //「次へ」ボタンの処理
     for(i = 0; i < btn_next.length; i ++){
         btn_next[i].addEventListener("click", e => {
             e.preventDefault();
-            if(state <= 2){
-                contents[state].classList.remove("visible");
-                state += 1;
-                contents[state].classList.add("visible");
-            }else{
-                for(let i = 0; i < btn_list.length; i ++){ //activeを探す
-                    for(let j = 0; j < btn_list[i].length; j ++){
-                        if(btn_list[i][j].classList.contains("active") == true){
-                            if(i < 2){
-                                keywords.push(btn_list[i][j].textContent);
-                            }else{
-                                budget.push(btn_list[i][j].textContent);
-                            }
-                        };
-                    }
-                }
-
-                var keywords_str = "";
-                var budget_str = ""
-                for(let i = 0; i < keywords.length; i++){
-                    if(i != 0){
-                        keywords_str += ","
-                    }
-                    keywords_str += keywords[i];
-                    // budget_str += keywords[i];
-                }
-                console.log(keywords_str)
-                // var url = "/gourmet_list?keywords=" + encodeURIComponent(keywords_str) + "&budget=" + encodeURIComponent(budget_str) + "&range=" + encodeURIComponent(range);
-                var url = "/gourmet_list?keywords=" + encodeURIComponent(keywords_str);
-                console.log(url)
-                window.location.href = url;
-            }
+            contents[state].classList.remove("active");
+            state += 1;
+            contents[state].classList.add("active");
         });
-    }
+    };
+
+    // 「検索」ボタン処理
+    btn_search.addEventListener("click", e => {
+        for(let i = 0; i < btn_list.length; i ++){
+            for(let j = 0; j < btn_list[i].length; j ++){
+                if(btn_list[i][j].classList.contains("active") == true){
+                    if(i == 0){ //genre
+                        let genreName = btn_list[i][j].textContent;
+                        genre_list.push(genre[genreName]);
+                    }else{ //budget
+                        let budgetName = btn_list[i][j].textContent;
+                        budget_list.push(budget[budgetName]);
+                    }
+                }
+            }
+        }
+        var range = conversion_range(slider.value);
+        get_location_and_redirect(genre_list, budget_list, range)
+    })
 
 </script>
 

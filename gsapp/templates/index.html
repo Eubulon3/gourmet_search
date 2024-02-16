@@ -1,13 +1,33 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block head %}
+<link rel = "stylesheet" href = "{%static 'css/top.css'%}">
+{% endblock head %}
+
 {% block logo %}
-<a href="{% url "gsapp:index" %}" class="logo-container">
+<a href="{% url 'gsapp:index' %}" class="logo-container">
     <img src="{% static 'images/logo.svg' %}" alt="モグマッチ" id = "logo">
 </a>{% endblock logo %}
 {% block content %}
-<div class = "btn-container">
-    <a href = "{% url "gsapp:search" %}" class="btn">
-        <p>お店をさがす</p>
-    </a>
+
+<div class="content">
+    <div class="top">
+        <div class="text-img-container">
+            <img src="{% static 'images/top_text.svg' %}" alt="'モグマッチ'ってなに?">
+        </div>
+        <p class="white">簡単な質問に答えるだけで、周辺のお店を見つけることができる、新感覚のグルメ検索アプリ</p>
+    </div>
+    <div class="appeal">
+        <p class="brown">３つの簡単な質問に答えて、あなたの近くのお店を見つけましょう！</p>
+        <a href="{% url 'gsapp:search' %}" class="btn-top">お店を探す</a>
+    </div>
+    <div class="streaming-img">
+        <div class="slides">
+            {% for photo in gourmet_photo %}
+                <img src="{{ photo.photo.pc.m }}" alt="画像" class="slide">
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock content %}
