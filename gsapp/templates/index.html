@@ -28,9 +28,9 @@
         <div class="slides">
             {% for value in gourmet_photo %}
                 {% if is_mobile %}
-                    <img src="{{ value.photo.mobile.l }}" alt="画像" class="slide {% if forloop.counter == 24 %}wrap-trriger{% endif %}">
+                    <img src="{{ value.photo.mobile.l }}" alt="画像" class="slide">
                 {% else %}
-                    <img src="{{ value.photo.pc.m }}" alt="画像" class="slide {% if forloop.counter == 24 %}wrap-trriger{% endif %}">
+                    <img src="{{ value.photo.pc.m }}" alt="画像" class="slide">
                 {% endif %}
             {% endfor %}
         </div>
