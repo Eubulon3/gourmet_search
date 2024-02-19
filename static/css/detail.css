@@ -2,12 +2,19 @@
     fill: #ffab6e;
 }
 
-.content{
-    position: absolute;
+.background{
+    position: fixed;
     width: 98%;
     height: 100vh;
     background-color: #fff;
     margin: 0 1% 0 1%;
+    padding: 80px 10% 0 10%;
+    z-index: -1;
+}
+
+.content{
+    position: absolute;
+    width: 100%;
     padding: 80px 10% 0 10%;
 
     display: flex;
@@ -21,10 +28,10 @@
     column-gap: 30px;
 }
 
-.detail-text{
+.detail-info{
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
+    row-gap: 5px;
 }
 
 hr{
@@ -36,16 +43,8 @@ hr{
     font-weight: bold;
 }
 
-.green{
-    color: green;
-}
-
-.red{
-    color: red;
-}
-
 img{
-    margin-top: 30px;
+    margin: 30px 0 30px 0;
 }
 
 .btn-back{
@@ -58,6 +57,8 @@ img{
     font-size: 20px;
 }
 
-.gray{
-    color: #6d6d6d;
+@media screen and (max-width: 767px){
+    .btn-back{
+        margin-left: -1rem;
+    }
 }

@@ -5,6 +5,8 @@
 <link rel = "stylesheet" href = "{%static 'css/top.css'%}">
 {% endblock head %}
 
+{% block title %}モグマッチ｜トップ{% endblock title %}
+
 {% block logo %}
 <a href="{% url 'gsapp:index' %}" class="logo-container">
     <img src="{% static 'images/logo.svg' %}" alt="モグマッチ" id = "logo">
@@ -24,8 +26,12 @@
     </div>
     <div class="streaming-img">
         <div class="slides">
-            {% for photo in gourmet_photo %}
-                <img src="{{ photo.photo.pc.m }}" alt="画像" class="slide">
+            {% for value in gourmet_photo %}
+                {% if is_mobile %}
+                    <img src="{{ value.photo.mobile.l }}" alt="画像" class="slide {% if forloop.counter == 24 %}wrap-trriger{% endif %}">
+                {% else %}
+                    <img src="{{ value.photo.pc.m }}" alt="画像" class="slide {% if forloop.counter == 24 %}wrap-trriger{% endif %}">
+                {% endif %}
             {% endfor %}
         </div>
     </div>

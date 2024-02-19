@@ -5,6 +5,8 @@
 <link rel = "stylesheet" href = "{%static 'css/search.css'%}">
 {% endblock head %}
 
+{% block title %}モグマッチ｜検索{% endblock title %}
+
 {% block logo %}
 <a href="{% url 'gsapp:index' %}" class="logo-container">
     <img src="{% static 'images/logo.svg' %}" alt="モグマッチ" id = "logo">
@@ -13,7 +15,7 @@
 {% block content %}
 
 
-<div id="img-container">
+<div id="food-img-container">
     <img src="{% static 'images/chinese_food.png' %}" alt="">
     <img src="{% static 'images/potato.png' %}" alt="">
     <img src="{% static 'images/italian.png' %}" alt="">
@@ -21,8 +23,8 @@
 </div>
 
 <div id="genre" class = "content active">
-    <h1 class = "question">何を食べたいですか？</h1>
-    <div class="h-container">
+    <p class = "bold" style = "color: white;">何を食べたいですか？</p>
+    <div class="flex-btn-container">
         <a class = "btn btn-genre" href="">居酒屋</a>
         <a class = "btn btn-genre" href="">ダイニングバー・バル</a>
         <a class = "btn btn-genre" href="">創作料理</a>
@@ -37,50 +39,40 @@
         <a class = "btn btn-genre" href="">カフェ・スイーツ</a>
         <a class = "btn btn-genre" href="">こだわらない</a>
     </div>
-    <div class="b-container">
-        <button href="" class="btn next">次へ</button>
-    </div>
+    <button href="" class="btn next">次へ</button>
 </div>
 <div id="budget" class = "content">
-    <h1 class = "question">予算はどれくらいですか？（2つまで選択可能）</h1>
-    <div class="h-container">
+    <p style="color:white;"class = "bold">予算はどれくらいですか？（2つまで選択可能）</p>
+    <div class="flex-btn-container">
         <a class = "btn btn-budget" href="">〜500円</a>
-        <a class = "btn btn-budget" href="">501〜1000円</a>
-        <a class = "btn btn-budget" href="">1001〜1500円</a>
-        <a class = "btn btn-budget" href="">1501〜2000円</a>
-        <a class = "btn btn-budget" href="">2001〜3000円</a>
-        <a class = "btn btn-budget" href="">3001〜4000円</a>
-        <a class = "btn btn-budget" href="">4001〜5000円</a>
-        <a class = "btn btn-budget" href="">5001〜7000円</a>
-        <a class = "btn btn-budget" href="">7001〜10000円</a>
-        <a class = "btn btn-budget" href="">10001〜15000円</a>
-        <a class = "btn btn-budget" href="">15001〜20000円</a>
-        <a class = "btn btn-budget" href="">20001〜30000円</a>
-        <a class = "btn btn-budget" href="">30001円〜</a>
+        <a class = "btn btn-budget" href="">500〜1000円</a>
+        <a class = "btn btn-budget" href="">1000〜1500円</a>
+        <a class = "btn btn-budget" href="">1500〜2000円</a>
+        <a class = "btn btn-budget" href="">2000〜3000円</a>
+        <a class = "btn btn-budget" href="">3000〜4000円</a>
+        <a class = "btn btn-budget" href="">4000〜5000円</a>
+        <a class = "btn btn-budget" href="">5000〜7000円</a>
+        <a class = "btn btn-budget" href="">7000〜10000円</a>
+        <a class = "btn btn-budget" href="">10000〜15000円</a>
+        <a class = "btn btn-budget" href="">15000〜20000円</a>
+        <a class = "btn btn-budget" href="">20000〜30000円</a>
+        <a class = "btn btn-budget" href="">30000円〜</a>
         <a class = "btn btn-budget" href="">こだわらない</a>
     </div>
-    <div class="b-container">
-        <button href="" class="btn next">次へ</button>
-    </div>
+    <button href="" class="btn next">次へ</button>
 </div>
-<div id="distance" class = "content">
-    <h1 class = "question">現在地からの距離</h1>
+<div id="range" class = "content">
+    <p style="color:white" class = "bold">現在地からの距離</p>
 
     <div id="slider-container">
         <input type="range" min="300" max="3000" value="1000" class="slider" id="myRange">
     </div>
-    
-    <div class="b-container">
-        <button href="" id="search" class = "btn next">検索</button>
-    </div>
+    <button href="" id="search" class = "btn next">検索</button>
 </div>
 
 <div id="loading" class = "content">
     <div id="loading-spinner"></div>
 </div>
-
-
-<!-- <button class="btn" id = "next">次へ</button> -->
 
 {% endblock content %}
 
@@ -88,6 +80,7 @@
 
 <script type="text/javascript">
 
+    //距離の変換
     function conversion_range(value){
         if(value<=300){
             range = "1";
@@ -103,6 +96,7 @@
         return range
     }
 
+    //位置情報取得とurl作成後リダイレクト
     function get_location_and_redirect(genre_list, budget_list, range){
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(position){
@@ -126,11 +120,13 @@
         }
     }
 
+    //(m)→(km)
     function convert_km(value){
         const km = value / 1000;
         return km + "km";
     }
 
+    // 徒歩の際のかかる時間の目安
     function convert_walking(meters){
         //平均的な歩行速度80m/min
         const speed = 80;
@@ -182,18 +178,18 @@
     
     budget = {
         "〜500円": "B009",
-        "501〜1000円": "B010",
-        "1001〜1500円": "B011",
-        "1501〜2000円": "B001",
-        "2001〜3000円": "B002",
-        "3001〜4000円": "B003",
-        "4001〜5000円": "B008",
-        "5001〜7000円": "B004",
-        "7001〜10000円": "B005",
-        "10001〜15000円": "B006",
-        "15001〜20000円": "B012",
-        "20001〜30000円": "B013",
-        "30001円〜": "B014",
+        "500〜1000円": "B010",
+        "1000〜1500円": "B011",
+        "1500〜2000円": "B001",
+        "2000〜3000円": "B002",
+        "3000〜4000円": "B003",
+        "4000〜5000円": "B008",
+        "5000〜7000円": "B004",
+        "7000〜10000円": "B005",
+        "10000〜15000円": "B006",
+        "15000〜20000円": "B012",
+        "20000〜30000円": "B013",
+        "30000円〜": "B014",
         "こだわらない": "",
     };
     

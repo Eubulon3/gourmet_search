@@ -1,4 +1,4 @@
-#img-container{
+#food-img-container{
     position: absolute;
     width: 100vw;
     height: 100vh;
@@ -6,29 +6,33 @@
     overflow: hidden;
 }
 
-#img-container img{
-    position: relative;
+#food-img-container img{
+    position: absolute;
 }
 
-#img-container :nth-child(1){
-    width: 57vw;
-    left: -25%;
-    top: -35%;
-}
-#img-container :nth-child(2){
-    width: 17vw;
-    left: 25%;
-    top: -25%;
-}
-#img-container :nth-child(3){
-    width: 40vw;
-    left: -2%;
+/* 中華料理 */
+#food-img-container :nth-child(1){
+    width: 50vw;
+    left: -20%;
     top: -20%;
 }
-#img-container :nth-child(4){
+/* ポテト */
+#food-img-container :nth-child(2){
+    width: 17vw;
+    top: 30%;
+    right: 5%;
+}
+/* パスタ */
+#food-img-container :nth-child(3){
+    width: 40vw;
+    top: 70%;
+    left: 0%;
+}
+/* 焼き鳥 */
+#food-img-container :nth-child(4){
     width: 27vw;
-    left: 30%;
-    top: -35%;
+    bottom: 5%;
+    right: 5%;
 }
 
 
@@ -52,23 +56,21 @@
     display: flex;
 }
 
-.question{
-    color: white;
-}
 
-.h-container{
-    margin-top: 10%;
-}
-
-
-.b-container{
-    width: 100%;
-    position: relative;
-    margin-top: 10%;
-
+.flex-btn-container{
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-flow: row wrap;
+    gap: 10px;
+    margin-top: 10%;
+}
+
+.flex-btn-container .btn{
+    flex: auto;
+    text-align: center;
+}
+
+.next{
+    margin-top: 10%;
 }
 
 #slider-container{
@@ -121,12 +123,72 @@
     border: 16px solid #f3f3f3;
     border-top: 16px solid #4f200d;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     animation: spin 2s linear infinite;
 }
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px){
+    .content{
+        padding: 0 20%;
+    }
+    #food-img-container :nth-child(1){
+        width: 70vw;
+        left: -20%;
+        top: -10%;
+    }
+    /* ポテト */
+    #food-img-container :nth-child(2){
+        width: 27vw;
+        top: 5%;
+        right: -1%;
+    }
+    /* パスタ */
+    #food-img-container :nth-child(3){
+        width: 50vw;
+        bottom: 5%;
+        left: 0%;
+    }
+    /* 焼き鳥 */
+    #food-img-container :nth-child(4){
+        width: 40vw;
+        bottom: 0%;
+        right: -1%;
+    }
+}
+
+
+@media screen and (max-width: 767px){
+    .content{
+        padding: 0 20px;
+    }
+    #food-img-container :nth-child(1){
+        width: 80vw;
+        left: -20%;
+        top: -10%;
+    }
+    /* ポテト */
+    #food-img-container :nth-child(2){
+        width: 37vw;
+        top: 5%;
+        right: -1%;
+    }
+    /* パスタ */
+    #food-img-container :nth-child(3){
+        width: 60vw;
+        bottom: 5%;
+        left: 0%;
+    }
+    /* 焼き鳥 */
+    #food-img-container :nth-child(4){
+        width: 50vw;
+        bottom: 0%;
+        right: -1%;
+    }
+    
 }

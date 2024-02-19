@@ -6,38 +6,37 @@
 <link rel = "stylesheet" href = "{%static 'css/detail.css'%}">
 {% endblock head %}
 
+{% block title %}モグマッチ｜店舗詳細{% endblock title %}
+
 {% block logo %}
-<a href="{% url 'gsapp:index' %}" class="logo-container">
-    <img src="{% static 'images/logo_orange.svg' %}" alt="モグマッチ" id = "logo">
-</a>
+<a href="{% url 'gsapp:index' %}" class="logo-container"><img src="{% static 'images/logo_orange.svg' %}" alt="モグマッチ" id = "logo"></a>
 {% endblock logo %}
 
 {% block content %}
+<div class="background"></div>
 <div class="content">
     <a href="#" onclick="history.back()"; return="false"; class="btn-back">&lsaquo;</a>
     <h2>検索結果</h2>
     <hr>
     <div class="detail">
-        <div class="detail-text">
+        <div class="detail-info">
             <h2 class="name">{{ detail.name }}</h2>
             <p><span class="bold">ジャンル：</span>{{detail.genre.name}}・{{ detail.genre.catch }}</p>
             <p><span class = "bold">所在地：</span> {{ detail.address }}</p>
-            <p>
-                <span class="bold">営業時間： </span>
-                {% if current_time >= detail.open and detail.close >= current_time %}
-                    <span class="green">営業中</span>
-                {% else %}
-                    <span class = "red">営業時間外</span>
-                {% endif %}
-                <br>{{ detail.open }}
-            </p>
+            <p><span class="bold">営業時間： </span>{{ detail.open }}</p>
             {% if detail.budget.average %}
             <p><span class = "bold">平均予算：</span> {{ detail.budget.average }}</p>
             {% else %}
             <p><span class = "bold">平均予算：</span> 不明</p>
             {% endif %}
+
+            {% if is_mobile %}
+            <img src="{{ detail.photo.mobile.l }}" alt="店舗画像">
+        </div>
+            {% else %}
         </div>
         <img src="{{ detail.photo.pc.l }}" alt="店舗画像">
+            {% endif %}
     </div>
 </div>
 {% endblock content %}

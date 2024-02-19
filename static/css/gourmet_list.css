@@ -2,13 +2,16 @@
     fill: #ffab6e;
 }
 
+a:hover{
+    opacity: .7;
+}
+
 .background{
     position: fixed;
     width: 98%;
     height: 100vh;
     background-color: #fff;
     margin: 0 1% 0 1%;
-    padding: 80px 10% 0 10%;
     z-index: -1;
 }
 
@@ -25,13 +28,10 @@
     width: 100%;
 }
 
-.access{
-    color: #6d6d6d;
-}
-
 .info{
     display: flex;
     justify-content: space-between;
+    column-gap: 10px;
 
     padding: 10px;
 }
@@ -56,9 +56,6 @@
     line-height: 1;
 }
 
-.pagination a:hover {
-    opacity: 0.7;
-}
 
 .pagination .current {
     background: #4f200d;
